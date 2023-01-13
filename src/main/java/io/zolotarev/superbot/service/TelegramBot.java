@@ -41,7 +41,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                    }
                default:
                    try {
-                       sendMessage(chatId, "Привет пиписька");
+                       sendMessage(chatId, "Хай чел");
                    } catch (TelegramApiException e) {
                        throw new RuntimeException(e);
                    }
