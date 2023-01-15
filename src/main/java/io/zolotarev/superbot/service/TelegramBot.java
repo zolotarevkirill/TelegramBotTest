@@ -1,31 +1,30 @@
 package io.zolotarev.superbot.service;
-import io.zolotarev.superbot.dao.PollsDAO;
-import org.checkerframework.checker.nullness.qual.KeyForBottom;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.zolotarev.superbot.handler.Handler;
 import org.springframework.stereotype.Component;
 import io.zolotarev.superbot.config.BotConfig;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.HashMap;
 
 
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
 
     final BotConfig config;
+    String[] arrayUsersPolls = new String[10];
+    HashMap<String, Handler> userLinkObject = new HashMap<>();
+    boolean f_is;
+    Handler handler;
 
-    @Autowired
-    private PollsDAO pollsDAO;
 
     public TelegramBot(BotConfig config){
         this.config = config;
@@ -47,40 +46,69 @@ public class TelegramBot extends TelegramLongPollingBot {
         {
            String messageText = update.getMessage().getText();
            long chatId = update.getMessage().getChatId();
+           handler = getHandlerUser(update.getMessage().getChat().getFirstName());
+//           handler = getHandlerUser("Надежда");
 
-           switch (messageText){
-               case "/start":
-                   try {
-                       startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
-                   } catch (TelegramApiException e) {
-                       throw new RuntimeException(e);
-                   }
-                   break;
-               case "/polls":
-                   try {
-                       String message = pollsDAO.index();
-                       sendMessage(chatId, message);
-                   } catch (TelegramApiException e) {
-                       throw new RuntimeException(e);
-                   }
-                   break;
-               default:
-                   try {
-                       sendMessage(chatId, "Нет такого ключевого слова");
-                   } catch (TelegramApiException e) {
-                       throw new RuntimeException(e);
-                   }
-                   break;
+            try {
+                sendMessage(chatId, "Handler State = "+handler.getState());
+            } catch (TelegramApiException e) {
+                throw new RuntimeException(e);
+            }
 
+            if(handler.getState() == 1 && !Objects.equals(messageText, "/stop")){
+               try {
+                   sendMessage(chatId, handler.nextQuestion());
+               } catch (TelegramApiException e) {
+                   throw new RuntimeException(e);
+               }
+           }else{
+               switch (messageText){
+                   case "/start":
+                       try {
+                           startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
+                       } catch (TelegramApiException e) {
+                           throw new RuntimeException(e);
+                       }
+                       break;
+                   case "/polls":
+                       try {
+                           handler = getHandlerUser(update.getMessage().getChat().getFirstName());
+//                           handler = getHandlerUser("Надежда");
+                           String message = handler.pollsInit();
+                           sendMessage(chatId, message);
+                       } catch (TelegramApiException e) {
+                           throw new RuntimeException(e);
+                       }
+                       break;
+                   case "/stop":
+                       try {
+                           handler.setState(0);
+                           sendMessage(chatId, "Опрос остановлен");
+                       } catch (TelegramApiException e) {
+                           throw new RuntimeException(e);
+                       }
+                       break;
+                   default:
+                       try {
+                           sendMessage(chatId, "Нет такого ключевого слова");
+                       } catch (TelegramApiException e) {
+                           throw new RuntimeException(e);
+                       }
+                       break;
+
+               }
            }
+
+
         }
     }
 
     private void startCommandReceived(long chatId, String name) throws TelegramApiException {
         String answer = "Привет, "+name+"! Введи ключевое слово.";
         sendMessage(chatId, answer);
-
     }
+
+
 
     private void sendMessage(long chatId, String textToSend) throws TelegramApiException {
         SendMessage message = new SendMessage();
@@ -115,5 +143,35 @@ public class TelegramBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e){
             throw new RuntimeException(e);
         }
+    }
+
+    public Handler getHandlerUser(String userTag){
+        f_is = false;
+        System.out.println("Длина массива");
+        System.out.println(arrayUsersPolls.length);
+        System.out.println(arrayUsersPolls[0]);
+        System.out.println(arrayUsersPolls[1]);
+        System.out.println(userLinkObject.get("r4353"));
+        System.out.println("________");
+
+        if(userLinkObject.get(userTag) == null)
+        {
+            System.out.println("Не Нашел");
+            System.out.println(userTag);
+            System.out.println("________");
+            Handler userHandler = new Handler();
+            userLinkObject.put(userTag, userHandler);
+            return userLinkObject.get(userTag);
+
+        }
+        else{
+            System.out.println("Нашел");
+            System.out.println(userTag);
+            System.out.println("________");
+            return userLinkObject.get(userTag);
+        }
+
+
+
     }
 }
