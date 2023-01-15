@@ -1,13 +1,21 @@
 package io.zolotarev.superbot.dao;
 
+import io.zolotarev.superbot.models.Polls;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 @Component
 public class PollsDAO {
+
+    private List<Polls> polls;
+
+    public String index(){
+        return "DAO TEST";
+    }
 
     private static final String URL = "jdbc:postgresql://localhost:5432/tg_bd_test";
     private static final String USERNAME = "postgres";
