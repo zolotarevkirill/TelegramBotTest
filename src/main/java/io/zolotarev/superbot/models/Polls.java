@@ -4,7 +4,7 @@ public class Polls {
     private int id;
     private String title;
 
-    public Polls(int id, String title){
+    public Polls(){
         this.id = id;
         this.title = title;
     }
@@ -18,10 +18,10 @@ public class Polls {
     }
 
     public String getTitle(){
-        return title;
+        return this.title;
     }
 
-    public void setTitle(){
+    public void setTitle(String title){
         this.title = title;
     }
 

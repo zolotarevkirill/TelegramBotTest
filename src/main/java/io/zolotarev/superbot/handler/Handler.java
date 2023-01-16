@@ -1,13 +1,16 @@
 package io.zolotarev.superbot.handler;
+import io.zolotarev.superbot.dao.PollsDAO;
 
-import io.zolotarev.superbot.models.Question;
+import java.sql.SQLException;
 
-import java.util.ArrayList;
 
 public class Handler {
 
+    private PollsDAO pollsDAO = new PollsDAO();
+
     private int state = 0;
-    private int next = 0;
+    private int countQuestions = 0;
+    private int next = 1;
 
 
     public int getState(){
@@ -18,24 +21,35 @@ public class Handler {
        state = number;
     }
 
-    public String pollsInit(){
-        state = 1;
+    public String pollsInit() throws SQLException {
+        System.out.println("*******");
+        System.out.println(pollsDAO.getAllQuestions().get(0));
+        System.out.println("*********");
+        countQuestions = pollsDAO.getAllQuestions().size();
+        if(countQuestions > 0){
+            state = 1;
+        }
 
         if(state == 1){
-            return "Начинается опрос";
+            next = 1;
+            return pollsDAO.getAllQuestions().get(0).getTitle();
         }
 
         return null;
     }
 
 
-    public String nextQuestion(){
-        if(state == 1)
+    public String nextQuestion() throws SQLException {
+        if(state == 1 && next < countQuestions)
         {
-            return "Вопрос 2";
+            next = next+1;
+            return pollsDAO.getAllQuestions().get((next-1)).getTitle();
+        }
+        else {
+            state = 0;
+            return "Опрос окончен";
         }
 
-        return null;
     }
 
 

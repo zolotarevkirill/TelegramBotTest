@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -60,8 +61,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                    sendMessage(chatId, handler.nextQuestion());
                } catch (TelegramApiException e) {
                    throw new RuntimeException(e);
+               } catch (SQLException e) {
+                   throw new RuntimeException(e);
                }
-           }else{
+            }else{
                switch (messageText){
                    case "/start":
                        try {
@@ -77,6 +80,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                            String message = handler.pollsInit();
                            sendMessage(chatId, message);
                        } catch (TelegramApiException e) {
+                           throw new RuntimeException(e);
+                       } catch (SQLException e) {
                            throw new RuntimeException(e);
                        }
                        break;
@@ -115,28 +120,28 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.setChatId(String.valueOf(chatId));
         message.setText(textToSend);
 
-        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-
-        List<KeyboardRow> keyboardRows = new ArrayList<>();
-        KeyboardRow row = new KeyboardRow();
-
-        row.add("Test 1");
-        row.add("Test 2");
-        row.add("Test 3");
-
-        keyboardRows.add(row);
-
-        row = new KeyboardRow();
-
-        row.add("Test 3");
-        row.add("Test 4");
-        row.add("Test 5");
-
-        keyboardRows.add(row);
-
-        keyboardMarkup.setKeyboard(keyboardRows);
-
-        message.setReplyMarkup(keyboardMarkup);
+//        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+//
+//        List<KeyboardRow> keyboardRows = new ArrayList<>();
+//        KeyboardRow row = new KeyboardRow();
+//
+//        row.add("Test 1");
+//        row.add("Test 2");
+//        row.add("Test 3");
+//
+//        keyboardRows.add(row);
+//
+//        row = new KeyboardRow();
+//
+//        row.add("Test 3");
+//        row.add("Test 4");
+//        row.add("Test 5");
+//
+//        keyboardRows.add(row);
+//
+//        keyboardMarkup.setKeyboard(keyboardRows);
+//
+//        message.setReplyMarkup(keyboardMarkup);
 
         try{
             execute(message);
