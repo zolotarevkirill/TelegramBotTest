@@ -2,6 +2,7 @@ package io.zolotarev.superbot.handler;
 import io.zolotarev.superbot.dao.PollsDAO;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 
 public class Handler {
@@ -11,6 +12,8 @@ public class Handler {
     private int state = 0;
     private int countQuestions = 0;
     private int next = 1;
+
+    private String userIdentificator = "";
 
 
     public int getState(){
@@ -22,9 +25,6 @@ public class Handler {
     }
 
     public String pollsInit() throws SQLException {
-        System.out.println("*******");
-        System.out.println(pollsDAO.getAllQuestions().get(0));
-        System.out.println("*********");
         countQuestions = pollsDAO.getAllQuestions().size();
         if(countQuestions > 0){
             state = 1;
@@ -52,6 +52,22 @@ public class Handler {
 
     }
 
+    public void setUserId(String userId){
+        if(Objects.equals(userIdentificator, "")){
+            userIdentificator = userId;
+        }
+    }
+
+    public  void saveAnswer (String answer) throws SQLException {
+        if(state == 1){
+            pollsDAO.saveAnswer(userIdentificator,next+"",answer);
+        }
+    }
+
+    public int checkStateUser(String user) throws SQLException {
+        int result = pollsDAO.checkuser(user);
+        return result;
+    }
 
 
 

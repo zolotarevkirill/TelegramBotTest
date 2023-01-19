@@ -1,6 +1,7 @@
 package io.zolotarev.superbot.dao;
 
 import io.zolotarev.superbot.models.Polls;
+import io.zolotarev.superbot.models.Question;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -11,6 +12,7 @@ import java.util.List;
 public class PollsDAO {
 
     private List<Polls> polls;
+
 
     public List<Polls> getAllQuestions() throws SQLException {
         List<Polls> question = new ArrayList<>();
@@ -26,6 +28,29 @@ public class PollsDAO {
 
         return question;
     }
+
+    public int checkuser(String id) throws SQLException {
+        String SQL = "SELECT * FROM answer WHERE id='"+id+"'";
+        Statement statement = null;
+        statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(SQL);
+        if(!resultSet.next())
+        {
+           return 0;
+        }
+        else{
+            return 1;
+        }
+    }
+
+
+    public void saveAnswer(String id, String question, String answer) throws SQLException {
+        String SQL = "INSERT into answer(id, qusetion, answer) VALUES ('"+id+"','"+question+"','"+answer+"')";
+        Statement statement =  connection.createStatement();
+        statement.execute(SQL);
+    }
+
+
 
     private static final String URL = "jdbc:postgresql://localhost:5432/tg_bd_test";
     private static final String USERNAME = "postgres";

@@ -47,14 +47,22 @@ public class TelegramBot extends TelegramLongPollingBot {
         {
            String messageText = update.getMessage().getText();
            long chatId = update.getMessage().getChatId();
-           handler = getHandlerUser(update.getMessage().getChat().getFirstName());
-//           handler = getHandlerUser("Надежда");
+           String lastName =  update.getMessage().getChat().getLastName();
+           String firstName = update.getMessage().getChat().getFirstName();
+           String userName =  update.getMessage().getChat().getUserName();
+           String userTag = userName+"_"+firstName+"_"+lastName;
+           handler = getHandlerUser(userTag);
 
-            try {
-                sendMessage(chatId, "Handler State = "+handler.getState());
-            } catch (TelegramApiException e) {
-                throw new RuntimeException(e);
-            }
+           if(handler.getState() ==  1)
+           {
+               System.out.println("Start save answer");
+               handler.setUserId(userTag);
+               try {
+                   handler.saveAnswer(messageText);
+               } catch (SQLException e) {
+                   throw new RuntimeException(e);
+               }
+           }
 
             if(handler.getState() == 1 && !Objects.equals(messageText, "/stop")){
                try {
@@ -73,11 +81,16 @@ public class TelegramBot extends TelegramLongPollingBot {
                            throw new RuntimeException(e);
                        }
                        break;
-                   case "/polls":
+                   case "Начать опрос":
                        try {
-                           handler = getHandlerUser(update.getMessage().getChat().getFirstName());
-//                           handler = getHandlerUser("Надежда");
-                           String message = handler.pollsInit();
+                           handler = getHandlerUser(userTag);
+                           int stateUser = handler.checkStateUser(userTag);
+                           String message = "Опрос уже пройден";
+
+                           if(stateUser !=  1){
+                              message = handler.pollsInit();
+                           }
+
                            sendMessage(chatId, message);
                        } catch (TelegramApiException e) {
                            throw new RuntimeException(e);
@@ -120,28 +133,20 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.setChatId(String.valueOf(chatId));
         message.setText(textToSend);
 
-//        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-//
-//        List<KeyboardRow> keyboardRows = new ArrayList<>();
-//        KeyboardRow row = new KeyboardRow();
-//
-//        row.add("Test 1");
-//        row.add("Test 2");
-//        row.add("Test 3");
-//
-//        keyboardRows.add(row);
-//
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+
+        List<KeyboardRow> keyboardRows = new ArrayList<>();
+        KeyboardRow row = new KeyboardRow();
+        row.add("Начать опрос");
+        keyboardRows.add(row);
 //        row = new KeyboardRow();
-//
 //        row.add("Test 3");
 //        row.add("Test 4");
 //        row.add("Test 5");
 //
 //        keyboardRows.add(row);
-//
-//        keyboardMarkup.setKeyboard(keyboardRows);
-//
-//        message.setReplyMarkup(keyboardMarkup);
+        keyboardMarkup.setKeyboard(keyboardRows);
+        message.setReplyMarkup(keyboardMarkup);
 
         try{
             execute(message);
@@ -152,27 +157,15 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     public Handler getHandlerUser(String userTag){
         f_is = false;
-        System.out.println("Длина массива");
-        System.out.println(arrayUsersPolls.length);
-        System.out.println(arrayUsersPolls[0]);
-        System.out.println(arrayUsersPolls[1]);
-        System.out.println(userLinkObject.get("r4353"));
-        System.out.println("________");
 
         if(userLinkObject.get(userTag) == null)
         {
-            System.out.println("Не Нашел");
-            System.out.println(userTag);
-            System.out.println("________");
             Handler userHandler = new Handler();
             userLinkObject.put(userTag, userHandler);
             return userLinkObject.get(userTag);
 
         }
         else{
-            System.out.println("Нашел");
-            System.out.println(userTag);
-            System.out.println("________");
             return userLinkObject.get(userTag);
         }
 
