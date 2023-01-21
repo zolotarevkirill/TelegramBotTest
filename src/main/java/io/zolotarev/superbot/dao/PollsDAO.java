@@ -29,6 +29,15 @@ public class PollsDAO {
         return question;
     }
 
+
+    public void deleteQuestions() throws SQLException{
+        Statement statement =  connection.createStatement();
+        String SQL = "DELETE FROM answer;";
+
+        System.out.println("DELETE");
+        System.out.println(statement.execute(SQL));
+    }
+
     public int checkuser(String id) throws SQLException {
         String SQL = "SELECT * FROM answer WHERE id='"+id+"'";
         Statement statement = null;
