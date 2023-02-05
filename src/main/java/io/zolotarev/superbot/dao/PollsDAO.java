@@ -1,5 +1,6 @@
 package io.zolotarev.superbot.dao;
 
+import io.zolotarev.superbot.config.DBConfig;
 import io.zolotarev.superbot.models.Polls;
 import io.zolotarev.superbot.models.Question;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,10 @@ import java.util.List;
 public class PollsDAO {
 
     private List<Polls> polls;
+
+    public PollsDAO() {
+
+    }
 
 
     public List<Polls> getAllQuestions() throws SQLException {
@@ -61,9 +66,12 @@ public class PollsDAO {
 
 
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/tg_bd_test";
-    private static final String USERNAME = "postgres";
-    private static final String PASSWORD = "123";
+    private static final String URL = "jdbc:postgresql://92.255.77.194:5432/default_db";
+//    private static final String URL = "jdbc:postgresql://localhost:5432/tg_bd_test";
+    private static final String USERNAME = "gen_user";
+//    private static final String USERNAME = "postgres";
+    private static final String PASSWORD = "postgres";
+//    private static final String PASSWORD = "123";
 
     private static Connection connection;
 

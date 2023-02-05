@@ -29,9 +29,12 @@ public class AnswerDAO {
         return answers;
     }
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/tg_bd_test";
-    private static final String USERNAME = "postgres";
-    private static final String PASSWORD = "123";
+        private static final String URL = "jdbc:postgresql://92.255.77.194:5432/default_db";
+//    private static final String URL = "jdbc:postgresql://localhost:5432/tg_bd_test";
+        private static final String USERNAME = "gen_user";
+//    private static final String USERNAME = "postgres";
+        private static final String PASSWORD = "postgres";
+//    private static final String PASSWORD = "123";
 
     private static Connection connection;
 

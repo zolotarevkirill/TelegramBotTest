@@ -7,12 +7,15 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @Data
-@PropertySource("application.properties")
-public class BotConfig {
-    @Value("${bot.name}")
-    String botName;
+@PropertySource("application-test.properties")
+public class DBConfig {
 
-    @Value("${bot.key}")
-    String token;
+    @Value("db.username")
+    String dbUser;
+
+    @Value("${db.password}")
+    String dbPassword;
+
+    @Value("${db.url}")
+    String dbUrl;
 }
-

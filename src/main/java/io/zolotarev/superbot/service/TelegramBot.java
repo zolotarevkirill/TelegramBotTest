@@ -1,5 +1,6 @@
 package io.zolotarev.superbot.service;
 import io.zolotarev.superbot.handler.Handler;
+import netscape.javascript.JSObject;
 import org.springframework.stereotype.Component;
 import io.zolotarev.superbot.config.BotConfig;
 
@@ -9,12 +10,28 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URL;
+import java.net.http.*;
+import java.net.http.HttpResponse.BodyHandlers;
+import org.telegram.telegrambots.meta.api.methods.GetFile;
+import net.minidev.json.JSONObject;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.Comparator;
+
+import static org.apache.commons.io.FileUtils.getFile;
 
 
 @Component
@@ -25,6 +42,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     HashMap<String, Handler> userLinkObject = new HashMap<>();
     boolean f_is;
     Handler handler;
+
+    String yaDiscURL = "https://cloud-api.yandex.net/v1/disk/";
 
 
     public TelegramBot(BotConfig config){
@@ -38,11 +57,80 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken(){
+        System.out.println("config.getToken()");
+        System.out.println(config.getToken());
         return config.getToken();
+    }
+
+
+    public void getRandomString() {
+
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+        StringBuilder buffer = new StringBuilder(targetStringLength);
+        for (int i = 0; i < targetStringLength; i++) {
+            int randomLimitedInt = leftLimit + (int)
+                    (random.nextFloat() * (rightLimit - leftLimit + 1));
+            buffer.append((char) randomLimitedInt);
+        }
+        String generatedString = buffer.toString();
+
+        System.out.println(generatedString);
     }
 
     @Override
     public void onUpdateReceived(Update update){
+        if (update.getMessage().hasPhoto()){
+            long chatId = update.getMessage().getChatId();
+            try {
+                sendMessage(chatId, "Это файл!");
+
+                //Работа с фото из бота
+                sendMessage(chatId, "Начинаю загрузку...!");
+                List<PhotoSize> photos = update.getMessage().getPhoto();
+                PhotoSize photo = photos.get(0);
+                String fileId = photo.getFileId();
+                String fileNamwe = "MyFirstPhoto";
+                String botToken = getBotToken();
+
+                URL url = new URL("https://api.telegram.org/bot"+botToken+"/getFile?file_id="+fileId);
+                BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+                String getFileResponse = br.readLine();
+
+//                https://yandex.ru/video/preview/2052560887994171178
+//                https://yandex.ru/video/preview/3339900611007758351
+
+
+
+
+                System.out.println("-----");
+                System.out.println(photos.get(0));
+                System.out.println(photos.size());
+                System.out.println(photo.getFilePath());
+                System.out.println("https://api.telegram.org/bot"+botToken+"/getFile?file_id="+fileId);
+                System.out.println("-----");
+
+
+                HttpClient client = HttpClient.newHttpClient();
+                HttpRequest request = HttpRequest.newBuilder()
+                        .GET()
+                        .uri(URI.create("https://cloud-api.yandex.net/v1/disk/resources?path=%2FTEST"))
+                        .header("Authorization", "OAuth y0_AgAAAAAHlGMCAAkY2gAAAADbeyOREl5n_eU3T3ykly0Beo-uxEpWPlk")
+                        .build();
+                HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+                System.out.println("Status");
+                System.out.println(response);
+
+                sendMessage(chatId, "Загрузил!");
+
+
+            } catch (TelegramApiException | IOException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         if(update.hasMessage() && update.getMessage().hasText())
         {
            String messageText = update.getMessage().getText();
