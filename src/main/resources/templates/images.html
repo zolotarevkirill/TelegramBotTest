@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Картинки</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>Картинки</h1>
+<table>
+    <tr th:each="images : ${images} ">
+        <td><p th:text="${images.getId()}"/></td>
+        <td><p th:text="${images.gettelegramID()}"/></td>
+        <td><p th:text="${images.getimageID()}"/></td>
+   </tr>
+</table>
+</body>
+</html>

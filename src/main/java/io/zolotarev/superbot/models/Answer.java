@@ -2,7 +2,7 @@ package io.zolotarev.superbot.models;
 
 public class Answer {
 
-    private int id;
+    private String id;
 
     private String question;
 
@@ -14,10 +14,10 @@ public class Answer {
         this.answer = answer;
     }
 
-    public int getId(){
+    public String getId(){
         return id;
     }
-    public void setId(int id){
+    public void setId(String id){
         this.id = id;
     }
 

@@ -1,8 +1,5 @@
 package io.zolotarev.superbot.dao;
-
-import io.zolotarev.superbot.config.DBConfig;
 import io.zolotarev.superbot.models.Polls;
-import io.zolotarev.superbot.models.Question;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -18,11 +15,26 @@ public class PollsDAO {
 
     }
 
+    public static List<Polls> getAllPolls(int category) throws SQLException {
+        List<Polls> pollsList = new ArrayList<>();
+        Statement statement =  connection.createStatement();
+        String SQL = "SELECT * FROM polls WHERE number = "+category;
+        ResultSet resultSet = statement.executeQuery(SQL);
+        while (resultSet.next()){
+            Polls polls = new Polls();
+            polls.setId(resultSet.getInt("id"));
+            polls.setTitle(resultSet.getString("title"));
+            polls.setNumber(resultSet.getInt("number"));
+            pollsList.add(polls);
+        }
 
-    public List<Polls> getAllQuestions() throws SQLException {
+        return pollsList;
+    }
+
+    public List<Polls> getAllQuestions(int pollID) throws SQLException {
         List<Polls> question = new ArrayList<>();
         Statement statement =  connection.createStatement();
-        String SQL = "SELECT * FROM polls;";
+        String SQL = "SELECT * FROM polls WHERE number = "+pollID+";";
         ResultSet resultSet = statement.executeQuery(SQL);
         while (resultSet.next()){
             Polls polls = new Polls();
@@ -34,6 +46,17 @@ public class PollsDAO {
         return question;
     }
 
+    public static void addPolls(int category_id, String category_title) throws SQLException{
+        Statement statement =  connection.createStatement();
+        String SQL = "INSERT into polls(title, number) VALUES ('"+category_title+"',"+category_id+")";
+        statement.execute(SQL);
+    }
+
+    public static void deletePolls(int id) throws SQLException{
+        Statement statement =  connection.createStatement();
+        String SQL = "DELETE FROM polls WHERE id = "+id+";";
+        statement.execute(SQL);
+    }
 
     public void deleteQuestions() throws SQLException{
         Statement statement =  connection.createStatement();
@@ -43,8 +66,8 @@ public class PollsDAO {
         System.out.println(statement.execute(SQL));
     }
 
-    public int checkuser(String id) throws SQLException {
-        String SQL = "SELECT * FROM answer WHERE id='"+id+"'";
+    public int checkuser(String id, int pollID) throws SQLException {
+        String SQL = "SELECT * FROM answer WHERE id='"+id+"' AND pollnumber = '"+pollID+"'";
         Statement statement = null;
         statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(SQL);
@@ -58,8 +81,9 @@ public class PollsDAO {
     }
 
 
-    public void saveAnswer(String id, String question, String answer) throws SQLException {
-        String SQL = "INSERT into answer(id, qusetion, answer) VALUES ('"+id+"','"+question+"','"+answer+"')";
+    public void saveAnswer(String id, String question, String answer, int pollNumber) throws SQLException {
+        String SQL = "INSERT into answer(id, qusetion, answer, pollNumber) VALUES ('"+id+"','"+question+"','"+answer+"','"+pollNumber+"')";
+        System.out.println(SQL);
         Statement statement =  connection.createStatement();
         statement.execute(SQL);
     }
@@ -67,11 +91,10 @@ public class PollsDAO {
 
 
     private static final String URL = "jdbc:postgresql://92.255.77.194:5432/default_db";
-//    private static final String URL = "jdbc:postgresql://localhost:5432/tg_bd_test";
+    //    private static final String URL = "jdbc:postgresql://localhost:5432/tg_bd_test";
     private static final String USERNAME = "gen_user";
-//    private static final String USERNAME = "postgres";
-    private static final String PASSWORD = "postgres";
-//    private static final String PASSWORD = "123";
+    //    private static final String USERNAME = "postgres";
+    private static final String PASSWORD = "postgres123";
 
     private static Connection connection;
 

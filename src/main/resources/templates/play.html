@@ -1,0 +1,282 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Игра "Открой сундук"</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+     <style>
+        table {
+            font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+            font-size: 14px;
+            border-collapse: collapse;
+            text-align: center;
+            }
+            th, td:first-child {
+            background: #AFCDE7;
+            color: white;
+            padding: 10px 20px;
+            }
+            th, td {
+            border-style: solid;
+            border-width: 0 1px 1px 0;
+            border-color: white;
+            }
+            td {
+            background: #D8E6F3;
+            }
+            th:first-child, td:first-child {
+            text-align: left;
+            }
+
+            .custom-btn {
+  width: 130px;
+  height: 40px;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 25px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  outline: none;
+}
+.btn-5 {
+  width: 130px;
+  height: 40px;
+  line-height: 42px;
+  padding: 0;
+  border: none;
+  background: rgb(255,27,0);
+background: linear-gradient(0deg, rgba(255,27,0,1) 0%, rgba(251,75,2,1) 100%);
+}
+.btn-5:hover {
+  color: #f0094a;
+  background: transparent;
+   box-shadow:none;
+}
+.btn-5:before,
+.btn-5:after{
+  content:'';
+  position:absolute;
+  top:0;
+  right:0;
+  height:2px;
+  width:0;
+  background: #f0094a;
+  box-shadow:
+   -1px -1px 5px 0px #fff,
+   7px 7px 20px 0px #0003,
+   4px 4px 5px 0px #0002;
+  transition:400ms ease all;
+}
+.btn-5:after{
+  right:inherit;
+  top:inherit;
+  left:0;
+  bottom:0;
+}
+.btn-5:hover:before,
+.btn-5:hover:after{
+  width:100%;
+  transition:800ms ease all;
+}
+HTML CSSResult Skip Results Iframe
+EDIT ON
+.custom-btn {
+  width: 130px;
+  height: 40px;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 25px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  outline: none;
+}
+.btn-7 {
+background: linear-gradient(0deg, rgba(255,151,0,1) 0%, rgba(251,75,2,1) 100%);
+  line-height: 42px;
+  padding: 0;
+  border: none;
+}
+.btn-7 span {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.btn-7:before,
+.btn-7:after {
+  position: absolute;
+  content: "";
+  right: 0;
+  bottom: 0;
+  background: rgba(251,75,2,1);
+  box-shadow:
+   -7px -7px 20px 0px rgba(255,255,255,.9),
+   -4px -4px 5px 0px rgba(255,255,255,.9),
+   7px 7px 20px 0px rgba(0,0,0,.2),
+   4px 4px 5px 0px rgba(0,0,0,.3);
+  transition: all 0.3s ease;
+}
+.btn-7:before{
+   height: 0%;
+   width: 2px;
+}
+.btn-7:after {
+  width: 0%;
+  height: 2px;
+}
+.btn-7:hover{
+  color: rgba(251,75,2,1);
+  background: transparent;
+}
+.btn-7:hover:before {
+  height: 100%;
+}
+.btn-7:hover:after {
+  width: 100%;
+}
+.btn-7 span:before,
+.btn-7 span:after {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 0;
+  background: rgba(251,75,2,1);
+  box-shadow:
+   -7px -7px 20px 0px rgba(255,255,255,.9),
+   -4px -4px 5px 0px rgba(255,255,255,.9),
+   7px 7px 20px 0px rgba(0,0,0,.2),
+   4px 4px 5px 0px rgba(0,0,0,.3);
+  transition: all 0.3s ease;
+}
+.btn-7 span:before {
+  width: 2px;
+  height: 0%;
+}
+.btn-7 span:after {
+  height: 2px;
+  width: 0%;
+}
+.btn-7 span:hover:before {
+  height: 100%;
+}
+.btn-7 span:hover:after {
+  width: 100%;
+}
+
+.five {
+  padding: 50px 20px 50px 170px;
+  text-align: center;
+} 
+.five h1 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  position: relative;
+  color: #FFF;
+  font-size: 2.5em;
+  font-weight: normal;
+  display: inline-block;
+  margin: 0;
+  line-height: 1;
+  padding: 8px 20px 8px 2px;
+  border-top: 4px solid;
+}
+.qrimg{
+  display: block;
+    margin-left: auto;
+    margin-right: auto }
+
+
+        </style>
+</head>
+<body style="background: linear-gradient(90deg, #082fef,#9d28f4,#e727f5);">
+
+<div class="five"><h1>Игра "Открой сундук"<br/>Турнирная таблица</h1></div>
+<table>
+    <p></p>
+    <!-- <p>
+        <img class="qrimg" src="/images/qrcode_add_user.png" width="250px" height="250px"/>
+    </p> -->
+    <p></p>
+    <div class="five"><h1>ИГРОКИ</h1></div>
+   <tr th:each="players : ${players} ">
+        <td>
+          <img src="/images/gnom.png" width="100px" height="180px"/>
+        </p>
+        </td>
+        <td>
+          <p th:text="${players.getName()}"/>
+        </td>
+
+        <td>
+            <!-- <p><a class="custom-btn btn-5" th:href="@{'/play/delete?id=' + ${players.getId}}">Удалить игрока</a></p> -->
+        </td>
+
+        <td>
+            <div th:switch="${players.getCode1}"> 
+                <p th:case="'NULL'">Сундук открыт</p>
+                <p th:case="*"><a  th:href="@{'/play/open?n=1&id=' + ${players.getId}}">
+                  <img th:src="${players.getImg1()}" width="200px" height="200px"/>
+                </a></p> 
+            </div>
+        </td>
+        <td>
+            <div th:switch="${players.getCode2}"> 
+                <p th:case="'NULL'">Сундук открыт</p>
+                <p th:case="*"><a  th:href="@{'/play/open?n=2&id=' + ${players.getId}}">
+                  <img th:src="${players.getImg2()}" width="200px" height="200px"/>
+                </a></p> 
+            </div>
+        </td>
+        <td>
+            <div th:switch="${players.getCode3}"> 
+                <p th:case="'NULL'">Сундук открыт</p>
+                <p th:case="*"><a th:href="@{'/play/open?n=3&id=' + ${players.getId}}">
+                  <img th:src="${players.getImg3()}" width="200px" height="200px"/>
+
+                  </a></p> 
+            </div>
+        </td>
+        <td>
+            <div th:switch="${players.getCode4}"> 
+                <p th:case="'NULL'">Сундук открыт</p>
+                <p th:case="*"><a  th:href="@{'/play/open?n=4&id=' + ${players.getId}}">
+                  <img th:src="${players.getImg4()}" width="200px" height="200px"/>
+                </a></p> 
+            </div>
+        </td>
+        <td>
+            <div th:switch="${players.getCode5}"> 
+                <p th:case="'NULL'">Сундук открыт</p>
+                <p th:case="*"><a  th:href="@{'/play/open?n=5&id=' + ${players.getId}}">
+                  <img th:src="${players.getImg5()}" width="200px" height="200px"/>
+                </a></p> 
+            </div>
+        </td>
+        <td>
+            <div th:switch="${players.getCode6}"> 
+                <p th:case="'NULL'">Сундук открыт</p>
+                <p th:case="*"><a  th:href="@{'/play/open?n=6&id=' + ${players.getId}}">
+                  <img th:src="${players.getImg6()}" width="200px" height="200px"/>
+
+                </a></p> 
+            </div>
+        </td>
+   </tr>
+</table>
+</body>
+</html>

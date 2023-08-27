@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Урправление игроками</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+     <style>
+        table {
+            font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+            font-size: 14px;
+            border-collapse: collapse;
+            text-align: center;
+            }
+            th, td:first-child {
+            background: #AFCDE7;
+            color: white;
+            padding: 10px 20px;
+            }
+            th, td {
+            border-style: solid;
+            border-width: 0 1px 1px 0;
+            border-color: white;
+            }
+            td {
+            background: #D8E6F3;
+            }
+            th:first-child, td:first-child {
+            text-align: left;
+            }
+        </style>
+</head>
+<body style="background: linear-gradient(90deg, #082fef,#9d28f4,#e727f5);">
+<table>
+    
+    <div class="five"><h1>ИГРОКИ</h1></div>
+    <p><a href="/play/form">ДОБАВИТЬ ИГРОКА</a></p>
+   <tr th:each="players : ${players} ">
+        <td>
+          <img src="/images/gnom.png" width="100px" height="180px"/>
+        </p>
+        </td>
+        <td>
+          <p th:text="${players.getName()}"></p>
+        </td>
+
+        <td>
+            <p><a class="custom-btn btn-5" th:href="@{'/play/delete?id=' + ${players.getId}}">Удалить игрока</a></p>
+        </td>
+
+        <td>
+            <div th:switch="${players.getCode1}"> 
+                <p th:case="'NULL'">Сундук открыт</p>
+                <p th:case="*"> <p th:text="${players.getCode1()}"></p>
+                <p><img th:src="${players.getImg1()}" width="200px" height="200px"/></p>
+            </p> 
+            </div>
+        </td>
+        <td>
+            <div th:switch="${players.getCode2}"> 
+                <p th:case="'NULL'">Сундук открыт</p>
+                <p th:case="*"> <p th:text="${players.getCode2()}"></p>
+                <p><img th:src="${players.getImg2()}" width="200px" height="200px"/></p>
+            </div>
+        </td>
+        <td>
+            <div th:switch="${players.getCode3}"> 
+                <p th:case="'NULL'">Сундук открыт</p>
+                <p th:case="*"> <p th:text="${players.getCode3()}"></p>
+                <p><img th:src="${players.getImg3()}" width="200px" height="200px"/></p>
+            </div>
+        </td>
+        <td>
+            <div th:switch="${players.getCode4}"> 
+                <p th:case="'NULL'">Сундук открыт</p>
+                <p th:case="*"> <p th:text="${players.getCode4()}"></p>
+                <p><img th:src="${players.getImg4()}" width="200px" height="200px"/></p>
+            </div>
+        </td>
+        <td>
+            <div th:switch="${players.getCode5}"> 
+                <p th:case="'NULL'">Сундук открыт</p>
+                <p th:case="*"> <p th:text="${players.getCode5()}"></p>
+                <p><img th:src="${players.getImg5()}" width="200px" height="200px"/></p>
+            </div>
+        </td>
+        <td>
+            <div th:switch="${players.getCode6}"> 
+                <p th:case="'NULL'">Сундук открыт</p>
+                <p th:case="*"> <p th:text="${players.getCode6()}"></p>
+                <p><img th:src="${players.getImg6()}" width="200px" height="200px"/></p>
+            </div>
+        </td>
+   </tr>
+</table>
+</body>
+</html>

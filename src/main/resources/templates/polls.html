@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Все опросы</title>
+    <style>
+        table, th, td {
+          border: 1px solid;
+        }
+        
+        table {
+          width: 100%;
+        }
+        </style>
+</head>
+<body>
+<H1>Все опросы</H1>
+<table>
+  <tr>
+    <td>
+      <form action="/polls" method="GET">
+        <label for="name">Выбирите опрос:</label><br/>
+        <p><select name="category">
+          <option selected value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="4">5</option>
+          <option value="4">6</option>
+          <option value="4">7</option>
+          <option value="4">8</option>
+          <option value="4">9</option>
+          <option value="4">10</option>
+         </select></p>
+         <p><input type="submit" value="Выбрать"></p>
+    </form>
+    </td>
+    <td>
+      <form action="/polls/add" method="GET">
+        <label for="name">Выбирите опрос куда добавить вопрос:</label><br/>
+        <p><select name="category_id">
+          <option selected value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="4">5</option>
+          <option value="4">6</option>
+          <option value="4">7</option>
+          <option value="4">8</option>
+          <option value="4">9</option>
+          <option value="4">10</option>
+         </select></p>
+         <label for="category_title">Введите вопрос:</label><br/>
+        <input name="category_title" id="category_title" style="height: 30px; width: 450px;" value=""/><br/>
+         <p><input type="submit" value="Добавить"></p>
+    </form>
+    </td>
+  </tr>
+</table>
+ 
+<table>
+    <tr th:each="polls : ${polls} ">
+        <td><p th:text="${polls.getId()}"/></td>
+        <td><p th:text="${polls.getTitle()}"/></td>
+        <td><p th:text="${polls.getNumber()}"/></td>
+        <td>
+          <p><a th:href="@{/polls/delete(id=${polls.getId})}">Удалить вопрос</a></p>
+          
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

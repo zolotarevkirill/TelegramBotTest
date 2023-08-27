@@ -3,10 +3,12 @@ package io.zolotarev.superbot.models;
 public class Polls {
     private int id;
     private String title;
+    private int number; 
 
     public Polls(){
         this.id = id;
         this.title = title;
+        this.number = number;
     }
 
     public int getId(){
@@ -23,6 +25,14 @@ public class Polls {
 
     public void setTitle(String title){
         this.title = title;
+    }
+
+    public int getNumber(){
+        return this.number;
+    }
+
+    public void setNumber(int number){
+        this.number = number;
     }
 
 }

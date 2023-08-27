@@ -3,14 +3,45 @@
 <head>
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        table, th, td {
+          border: 1px solid;
+        }
+        
+        table {
+          width: 100%;
+        }
+        </style>
 </head>
 <body>
 <!--<p th:text="'Hello, ' + ${name} + '!'" />-->
 <h1>Ответы</h1>
 <table>
+    <tr>
+      <td>
+        <form action="/answers" method="GET">
+          <label for="name">Выбирите опрос:</label><br/>
+          <p><select name="category">
+            <option selected value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="4">5</option>
+            <option value="4">6</option>
+            <option value="4">7</option>
+            <option value="4">8</option>
+            <option value="4">9</option>
+            <option value="4">10</option>
+           </select></p>
+           <p><input type="submit" value="Выбрать"></p>
+      </form>
+      </td>
+      </tr>
+      </table>
+<table>
     <tr th:each="answers : ${answers} ">
         <td><p th:text="${answers.getId()}"/></td>
-        <td><p th:text="${answers.getQuestions()}"/></td>
+        <td><p th:text="${answers.getQuestion()}"/></td>
         <td><p th:text="${answers.getAnswer()}"/></td>
     </tr>
 </table>

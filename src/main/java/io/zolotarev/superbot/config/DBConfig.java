@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @Data
-@PropertySource("application-test.properties")
+@PropertySource("application.properties")
 public class DBConfig {
 
     @Value("db.username")

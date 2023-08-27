@@ -12,9 +12,17 @@ public class Handler {
     private int state = 0;
     private int countQuestions = 0;
     private int next = 1;
+    private int pollID = 1;
 
     private String userIdentificator = "";
 
+    public void setPollId(int pID){
+        pollID = pID;
+    }
+
+    public int getPollId(){
+        return pollID;
+    }
 
     public int getState(){
         return state;
@@ -25,14 +33,14 @@ public class Handler {
     }
 
     public String pollsInit() throws SQLException {
-        countQuestions = pollsDAO.getAllQuestions().size();
+        countQuestions = pollsDAO.getAllQuestions(pollID).size();
         if(countQuestions > 0){
             state = 1;
         }
 
         if(state == 1){
             next = 1;
-            return pollsDAO.getAllQuestions().get(0).getTitle();
+            return pollsDAO.getAllQuestions(pollID).get(0).getTitle();
         }
 
         return null;
@@ -43,11 +51,11 @@ public class Handler {
         if(state == 1 && next < countQuestions)
         {
             next = next+1;
-            return pollsDAO.getAllQuestions().get((next-1)).getTitle();
+            return pollsDAO.getAllQuestions(pollID).get((next-1)).getTitle();
         }
         else {
             state = 0;
-            return "Опрос окончен";
+            return "THE END";
         }
 
     }
@@ -60,12 +68,14 @@ public class Handler {
 
     public  void saveAnswer (String answer) throws SQLException {
         if(state == 1){
-            pollsDAO.saveAnswer(userIdentificator,next+"",answer);
+            int pollNumber = getPollId();
+            String question = pollsDAO.getAllQuestions(pollID).get((next-1)).getTitle();
+            pollsDAO.saveAnswer(userIdentificator,question,answer,pollNumber);
         }
     }
 
     public int checkStateUser(String user) throws SQLException {
-        int result = pollsDAO.checkuser(user);
+        int result = pollsDAO.checkuser(user, pollID);
         return result;
     }
 
